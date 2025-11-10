@@ -1,0 +1,65 @@
+services:
+  # client:
+  #   build:
+  #     context: .
+  #     dockerfile: ./client/Dockerfile
+  #   ports:
+  #     - "3000:3000"
+  #   volumes:
+  #     - ./client:/app
+  #     - /app/node_modules
+  #     - /app/.next
+  #   depends_on:
+  #     - server
+  #   networks:
+  #     - shelfshare-network
+
+  server:
+    build:
+      context: .
+      dockerfile: ./server/Dockerfile
+    ports:
+      - "${PORT}:${PORT}"
+    environment:
+      - PORT=${PORT}
+      - MONGO_URI=${MONGO_URI}
+      - REDIS_URL=${REDIS_URL}
+      - JWT_SECRET=${JWT_SECRET}
+      - CLIENT_URL=${CLIENT_URL}
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+      - /app/dist
+    depends_on:
+      - mongo
+      - redis
+    networks:
+      - shelfshare-network
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD}
+    networks:
+      - shelfshare-network
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - shelfshare-network
+
+volumes:
+  mongo_data:
+  redis_data:
+
+networks:
+  shelfshare-network:

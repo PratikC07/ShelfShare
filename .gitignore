@@ -1,0 +1,29 @@
+# Environment variables
+# Never commit sensitive data!
+.env
+.env.*.local
+.env.local
+
+# Dependencies
+# These are installed by npm/yarn in each service
+node_modules/
+
+# Server Build Artifacts
+server/dist/
+
+# Client Build Artifacts (Next.js)
+client/.next/
+client/out/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# OS & IDE Files
+.DS_Store
+.idea/
+.vscode/
+!.vscode/extensions.json

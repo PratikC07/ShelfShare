@@ -1,0 +1,17 @@
+# Git
+.git
+.gitignore
+
+# Env
+.env
+
+# Dependencies
+client/node_modules
+server/node_modules
+
+# Build artifacts
+client/.next
+server/dist
+
+# OS files
+.DS_Store
