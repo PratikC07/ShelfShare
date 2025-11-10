@@ -1,12 +1,11 @@
 // server/src/api.ts
 import { Router } from "express";
-
-// --- Placeholder Imports (We will create these soon) ---
-// import authRouter from './modules/auth/auth.route.js';
-// ----------------------------------------------------
+import authRouter from "./modules/auth/auth.route.js";
+import productsRouter from "./modules/products/products.route.js";
 
 const router = Router();
 
-// router.use('/auth', authRouter);
+router.use("/auth", authRouter);
+router.use("/products", productsRouter);
 
 export default router;

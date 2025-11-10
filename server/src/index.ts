@@ -4,11 +4,8 @@ import cors from "cors";
 import { config } from "./config/index.js";
 import { connectDB } from "./lib/mongoose.js";
 import { connectRedis, redisSubscriber } from "./lib/redis.js";
-
-// --- Placeholder Imports (We will create these next) ---
-// import apiRouter from "./api.js";
-// import { errorHandler } from "./middlewares/errorHandler.js";
-// ----------------------------------------------------
+import apiRouter from "./api.js";
+import { errorHandler } from "./middlewares/errorHandler.js";
 
 const startServer = async () => {
   // 1. Connect to our databases
