@@ -27,6 +27,14 @@ const userSchema = new Schema(
       required: true,
       default: 0,
     },
+    referredUsersCount: {
+      type: Number,
+      default: 0,
+    },
+    convertedUsersCount: {
+      type: Number,
+      default: 0,
+    },
     purchasedProducts: [
       {
         type: Schema.Types.ObjectId,

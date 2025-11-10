@@ -43,13 +43,19 @@ export const registerUser = async (input: RegisterSchema) => {
     if (!referrer) {
       throw new NotFoundError("Invalid referral code");
     }
-    // Create the link
-    const referral = new ReferralModel({
-      referrer: referrer._id,
-      referred: newUser._id,
-      status: "pending",
-    });
-    await referral.save();
+    // --- 💡 ATOMIC UPDATE ---
+    // Atomically increment the referrer's count
+    await Promise.all([
+      void ReferralModel.create({
+        referrer: referrer._id,
+        referred: newUser._id,
+        status: "pending",
+      }),
+      void UserModel.updateOne(
+        { _id: referrer._id },
+        { $inc: { referredUsersCount: 1 } } // Increment the counter
+      ),
+    ]);
   }
 
   // 6. Sign JWT
