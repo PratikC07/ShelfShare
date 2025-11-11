@@ -18,3 +18,17 @@ body {
   background-color: rgba(30, 41, 59, 0.4); /* slate-800 with opacity */
   border-color: rgba(71, 85, 105, 0.3); /* slate-600 with opacity */
 }
+
+/* Add new layer for custom toast component styles */
+@layer components {
+  .toast-base {
+    @apply bg-white text-slate-900 rounded-xl p-4 shadow-lg;
+    @apply dark:bg-slate-900 dark:text-slate-50;
+  }
+  .toast-success {
+    @apply border border-primary;
+  }
+  .toast-error {
+    @apply border border-red-600;
+  }
+}

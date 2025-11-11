@@ -1,15 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-// We can define a basic User type here
-// We'll expand this later based on our API response
-interface User {
-  _id: string;
-  name: string;
-  email: string;
-  referralCode: string;
-  totalCredits: number;
-}
+import { type User } from "@/app/(auth)/types";
 
 interface AuthState {
   token: string | null;
@@ -19,7 +10,6 @@ interface AuthState {
 }
 
 export const useAuthStore = create<AuthState>()(
-  // 'persist' middleware saves the store to localStorage
   persist(
     (set) => ({
       token: null,
@@ -28,7 +18,7 @@ export const useAuthStore = create<AuthState>()(
       logout: () => set({ token: null, user: null }),
     }),
     {
-      name: "auth-storage", // key in localStorage
+      name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
     }
   )

@@ -1,23 +1,55 @@
 import { Button } from "@/components/ui/Button";
 import { LinkIcon, Award } from "lucide-react";
 import Link from "next/link";
+// Import our new motion components
+import { MotionDiv, MotionH1, MotionP } from "@/components/ui/motion";
+
+// Define animation variants
+const variants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+};
 
 export function HeroSection() {
   return (
-    <section className="w-full px-4 py-20 sm:px-10 lg:px-20 lg:py-28">
+    <section className="relative flex min-h-screen w-full items-center px-4 py-20 sm:px-10 lg:px-20 lg:py-28">
+      {/* Background elements */}
+      <div className="absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/4 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl dark:bg-primary/30"></div>
+        <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl dark:bg-purple-500/30"></div>
+      </div>
+
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-8">
-          <div className="flex flex-col gap-8 text-center lg:text-left">
+          {/* Animated Text Content */}
+          <MotionDiv
+            className="flex flex-col gap-8 text-center lg:text-left"
+            initial="hidden"
+            animate="visible"
+            transition={{ staggerChildren: 0.1 }} // Stagger children animations
+          >
             <div className="flex flex-col gap-4">
-              <h1 className="text-4xl font-black leading-tight tracking-tighter text-slate-900 sm:text-5xl md:text-6xl dark:text-white">
+              <MotionH1
+                className="text-4xl font-black leading-tight tracking-tighter text-slate-900 sm:text-5xl md:text-6xl dark:text-white"
+                variants={variants}
+                transition={{ duration: 0.5 }}
+              >
                 The Digital Store. Rewarded.
-              </h1>
-              <p className="mx-auto max-w-xl text-lg font-normal text-slate-600 dark:text-slate-400 lg:mx-0">
+              </MotionH1>
+              <MotionP
+                className="mx-auto max-w-xl text-lg font-normal text-slate-600 dark:text-slate-400 lg:mx-0"
+                variants={variants}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
                 Share your unique link to earn credits on every purchase and get
                 exclusive access to our entire library.
-              </p>
+              </MotionP>
             </div>
-            <div className="flex flex-wrap items-center justify-center gap-4 lg:justify-start">
+            <MotionDiv
+              className="flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+              variants={variants}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
               <Button asChild variant="primary" size="lg">
                 <Link href="/register">
                   <span className="truncate">Get Started</span>
@@ -28,13 +60,18 @@ export function HeroSection() {
                   <span className="truncate">Log In</span>
                 </Link>
               </Button>
-            </div>
-          </div>
+            </MotionDiv>
+          </MotionDiv>
+
+          {/* Animated Glass Cards */}
           <div className="relative flex min-h-[400px] items-center justify-center lg:h-full">
-            <div className="absolute h-64 w-64 rounded-full bg-primary/20 blur-3xl dark:bg-primary/30"></div>
-            <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl dark:bg-purple-500/30"></div>
             <div className="relative mx-auto w-full max-w-md space-y-4">
-              <div className="relative z-10 w-full -rotate-3 rounded-xl p-6 shadow-xl glass-card">
+              <MotionDiv
+                className="relative z-10 w-full -rotate-3 rounded-xl p-6 shadow-xl glass-card"
+                initial={{ opacity: 0, x: 50, rotate: -3 }}
+                animate={{ opacity: 1, x: 0, rotate: -3 }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
                 <div className="flex flex-col gap-2">
                   <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">
                     Referral Link
@@ -46,8 +83,13 @@ export function HeroSection() {
                     </p>
                   </div>
                 </div>
-              </div>
-              <div className="relative z-20 ml-auto w-3/4 rotate-2 rounded-xl p-6 shadow-2xl glass-card">
+              </MotionDiv>
+              <MotionDiv
+                className="relative z-20 ml-auto w-3/4 rotate-2 rounded-xl p-6 shadow-2xl glass-card"
+                initial={{ opacity: 0, x: 50, rotate: 2 }}
+                animate={{ opacity: 1, x: 0, rotate: 2 }}
+                transition={{ duration: 0.5, delay: 0.5 }}
+              >
                 <div className="flex flex-col gap-2">
                   <h3 className="text-sm font-medium text-slate-600 dark:text-slate-300">
                     Total Credits
@@ -61,7 +103,7 @@ export function HeroSection() {
                     </p>
                   </div>
                 </div>
-              </div>
+              </MotionDiv>
             </div>
           </div>
         </div>
