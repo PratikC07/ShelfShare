@@ -6,11 +6,14 @@ import { UserModel } from "../../models/user.model.js";
 import { ReferralModel } from "../../models/referral.model.js";
 import { config } from "../../config/index.js";
 import {
+  ApiError,
+  BadRequestError,
   ConflictError,
   NotFoundError,
   UnauthorizedError,
 } from "../../utils/errors.js";
 import { generateUniqueReferralCode } from "../../utils/generateReferralCode.js";
+import mongoose from "mongoose";
 
 export const registerUser = async (input: RegisterSchema) => {
   const { name, email, password, referralCode } = input;
@@ -27,38 +30,69 @@ export const registerUser = async (input: RegisterSchema) => {
   // 3. Generate a *new* unique code for this user
   const newReferralCode = await generateUniqueReferralCode();
 
-  // 4. Create new user
+  // We need to save the new user *within* the transaction
+  // so we create the object instance first.
   const newUser = new UserModel({
     name,
     email,
     password: hashedPassword,
     referralCode: newReferralCode, // Their *own* new code
   });
-  await newUser.save();
 
-  // 5. **Handle the referral logic**
-  if (referralCode) {
-    // Find the user who *owns* the code that was provided
-    const referrer = await UserModel.findOne({ referralCode });
-    if (!referrer) {
-      throw new NotFoundError("Invalid referral code");
+  // 4. **Start MongoDB Transaction**
+  const session = await mongoose.startSession();
+
+  try {
+    await session.withTransaction(async () => {
+      // 4a. Save the new user
+      await newUser.save({ session }); // <-- Pass session
+
+      // 4b. **Handle the referral logic (inside the transaction)**
+      if (referralCode) {
+        // Find the user who *owns* the code that was provided
+        const referrer = await UserModel.findOne({ referralCode }).session(
+          session
+        );
+        if (!referrer) {
+          // This will cause the transaction to abort and roll back the user creation
+          throw new NotFoundError("Invalid referral code");
+        }
+
+        // --- 💡 ATOMIC TRANSACTIONAL UPDATES ---
+        await ReferralModel.create(
+          [
+            {
+              referrer: referrer._id,
+              referred: newUser._id,
+              status: "pending",
+            },
+          ],
+          { session } // <-- Pass session
+        );
+
+        await UserModel.updateOne(
+          { _id: referrer._id },
+          { $inc: { referredUsersCount: 1 } },
+          { session } // <-- Pass session
+        );
+      }
+    }); // <-- Transaction ends and commits here
+  } catch (error) {
+    // If anything fails (like "Invalid referral code"), the transaction
+    // will be rolled back and the user will not be created.
+    console.error("MongoDB Transaction Error in registerUser:", error);
+
+    // Re-throw the specific error if it's one we know
+    if (error instanceof ApiError) {
+      throw error;
     }
-    // --- 💡 ATOMIC UPDATE ---
-    // Atomically increment the referrer's count
-    await Promise.all([
-      ReferralModel.create({
-        referrer: referrer._id,
-        referred: newUser._id,
-        status: "pending",
-      }),
-      UserModel.findByIdAndUpdate(
-        referrer._id,
-        { $inc: { referredUsersCount: 1 } } // Increment the counter
-      ),
-    ]);
+    // Otherwise throw a generic error
+    throw new BadRequestError("User registration failed, please try again.");
+  } finally {
+    await session.endSession();
   }
 
-  // 6. Sign JWT
+  // 5. Sign JWT
   const token = jwt.sign({ userId: newUser.id }, config.jwtSecret, {
     expiresIn: "1d",
   });
