@@ -36,7 +36,8 @@ export const createRateLimiter = ({
       }
       next();
     } catch (error) {
-      next(error);
+      console.error("Redis rate limiter error, failing open:", error);
+      next();
     }
   };
 };

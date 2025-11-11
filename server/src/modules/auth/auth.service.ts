@@ -46,13 +46,13 @@ export const registerUser = async (input: RegisterSchema) => {
     // --- 💡 ATOMIC UPDATE ---
     // Atomically increment the referrer's count
     await Promise.all([
-      void ReferralModel.create({
+      ReferralModel.create({
         referrer: referrer._id,
         referred: newUser._id,
         status: "pending",
       }),
-      void UserModel.updateOne(
-        { _id: referrer._id },
+      UserModel.findByIdAndUpdate(
+        referrer._id,
         { $inc: { referredUsersCount: 1 } } // Increment the counter
       ),
     ]);

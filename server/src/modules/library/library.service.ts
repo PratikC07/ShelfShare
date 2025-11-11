@@ -7,10 +7,20 @@ const LIBRARY_CACHE_KEY = (userId: string) => `user:${userId}:purchases`;
 const CACHE_EXPIRATION_SECONDS = 3600; // 1 hour
 
 export const getPurchasedProducts = async (userId: string) => {
+  let cachedLibrary: string | null = null;
   // 1. Check cache first
-  const cachedLibrary = await redisClient.get(LIBRARY_CACHE_KEY(userId));
+  try {
+    cachedLibrary = await redisClient.get(LIBRARY_CACHE_KEY(userId));
+  } catch (err) {
+    console.error("Redis GET error (getPurchasedProducts):", err);
+  }
+
   if (cachedLibrary) {
-    return JSON.parse(cachedLibrary);
+    try {
+      return JSON.parse(cachedLibrary);
+    } catch (err) {
+      console.error("Redis JSON parse error:", err);
+    }
   }
 
   // 2. If not in cache, fetch from DB
@@ -18,7 +28,7 @@ export const getPurchasedProducts = async (userId: string) => {
     .select("purchasedProducts")
     .populate({
       path: "purchasedProducts",
-      select: "name imageUrl downloadUrl", // Only select the fields we need
+      select: "name imageUrl downloadUrl",
     });
 
   if (!user) {
@@ -28,11 +38,15 @@ export const getPurchasedProducts = async (userId: string) => {
   const products = user.purchasedProducts;
 
   // 3. Save to cache and return
-  await redisClient.setEx(
-    LIBRARY_CACHE_KEY(userId),
-    CACHE_EXPIRATION_SECONDS,
-    JSON.stringify(products)
-  );
+  try {
+    await redisClient.setEx(
+      LIBRARY_CACHE_KEY(userId),
+      CACHE_EXPIRATION_SECONDS,
+      JSON.stringify(products)
+    );
+  } catch (err) {
+    console.error("Redis SET error (getPurchasedProducts):", err);
+  }
 
   return products;
 };

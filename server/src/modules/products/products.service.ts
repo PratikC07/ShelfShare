@@ -9,9 +9,19 @@ const CACHE_EXPIRATION_SECONDS = 3600; // 1 hour
 
 export const getAllProducts = async () => {
   // 1. Check cache first
-  const cachedProducts = await redisClient.get(ALL_PRODUCTS_CACHE_KEY);
+  let cachedProducts: string | null = null;
+  try {
+    cachedProducts = await redisClient.get(ALL_PRODUCTS_CACHE_KEY);
+  } catch (err) {
+    console.error("Redis GET error (getAllProducts):", err);
+  }
+
   if (cachedProducts) {
-    return JSON.parse(cachedProducts);
+    try {
+      return JSON.parse(cachedProducts);
+    } catch (err) {
+      console.error("Redis JSON parse error:", err);
+    }
   }
 
   // 2. If not in cache, fetch from DB
@@ -21,20 +31,35 @@ export const getAllProducts = async () => {
   );
 
   // 3. Save to cache and return
-  await redisClient.setEx(
-    ALL_PRODUCTS_CACHE_KEY,
-    CACHE_EXPIRATION_SECONDS,
-    JSON.stringify(products)
-  );
+  try {
+    await redisClient.setEx(
+      ALL_PRODUCTS_CACHE_KEY,
+      CACHE_EXPIRATION_SECONDS,
+      JSON.stringify(products)
+    );
+  } catch (err) {
+    console.error("Redis SET error (getAllProducts):", err);
+  }
   return products;
 };
 
 export const getProductById = async (id: string) => {
-  // 1. Check cache first
   const cacheKey = PRODUCT_CACHE_KEY(id);
-  const cachedProduct = await redisClient.get(cacheKey);
+  let cachedProduct: string | null = null;
+
+  // 1. Check cache first
+  try {
+    cachedProduct = await redisClient.get(cacheKey);
+  } catch (err) {
+    console.error("Redis GET error (getProductById):", err);
+  }
+
   if (cachedProduct) {
-    return JSON.parse(cachedProduct);
+    try {
+      return JSON.parse(cachedProduct);
+    } catch (err) {
+      console.error("Redis JSON parse error:", err);
+    }
   }
 
   // 2. If not in cache, fetch from DB
@@ -44,10 +69,14 @@ export const getProductById = async (id: string) => {
   }
 
   // 3. Save to cache and return
-  await redisClient.setEx(
-    cacheKey,
-    CACHE_EXPIRATION_SECONDS,
-    JSON.stringify(product)
-  );
+  try {
+    await redisClient.setEx(
+      cacheKey,
+      CACHE_EXPIRATION_SECONDS,
+      JSON.stringify(product)
+    );
+  } catch (err) {
+    console.error("Redis SET error (getProductById):", err);
+  }
   return product;
 };

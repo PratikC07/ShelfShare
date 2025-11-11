@@ -58,5 +58,9 @@ export const subscribeToDashboardUpdates = async (
  */
 export const unsubscribeFromDashboardUpdates = (userId: string) => {
   const channel = DASHBOARD_PUBSUB_CHANNEL(userId);
-  redisSubscriber.unsubscribe(channel);
+  try {
+    redisSubscriber.unsubscribe(channel);
+  } catch (err) {
+    console.error(`Error unsubscribing from Redis channel ${channel}:`, err);
+  }
 };

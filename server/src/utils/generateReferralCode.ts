@@ -8,9 +8,9 @@ export const generateUniqueReferralCode = async (): Promise<string> => {
 
   do {
     // Generates a code like 'A4T-G8B'
-    referralCode = nanoid(8)
+    referralCode = nanoid(12)
       .replace(/-/g, "")
-      .match(/.{1,3}/g)!
+      .match(/.{1,4}/g)! // Change to 4-char groups
       .join("-")
       .toUpperCase();
 
