@@ -1,0 +1,20 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  @apply bg-background-light text-slate-900 dark:bg-background-dark dark:text-white font-display;
+}
+
+/* Glassmorphism card effect from heading.html */
+.glass-card {
+  background-color: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+  background-color: rgba(30, 41, 59, 0.4); /* slate-800 with opacity */
+  border-color: rgba(71, 85, 105, 0.3); /* slate-600 with opacity */
+}
