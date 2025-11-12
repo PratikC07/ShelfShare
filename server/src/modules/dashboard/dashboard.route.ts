@@ -5,13 +5,11 @@ import {
   getDashboardStatsHandler,
   streamDashboardUpdatesHandler,
 } from "./dashboard.controller.js";
+import { isAuthenticatedSSE } from "../../middlewares/isAuthenticatedSSE.js";
 
 const router = Router();
 
-// All routes in this module are protected
-router.use(isAuthenticated);
-
-router.get("/", getDashboardStatsHandler); // The REST endpoint
-router.get("/stream", streamDashboardUpdatesHandler); // The SSE endpoint
+router.get("/", isAuthenticated, getDashboardStatsHandler); // The REST endpoint
+router.get("/stream", isAuthenticatedSSE, streamDashboardUpdatesHandler); // The SSE endpoint
 
 export default router;
