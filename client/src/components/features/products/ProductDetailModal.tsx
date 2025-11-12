@@ -11,6 +11,7 @@ import {
   useGetMyPurchases,
 } from "@/features/purchase/hooks";
 import { useAuthStore } from "@/store/auth.store";
+import { useRouter } from "next/navigation";
 
 // Import the "dumb" view components
 import { ProductDetailView } from "./ProductDetailView";
@@ -32,6 +33,7 @@ export function ProductDetailModal({
   onClose,
 }: ProductDetailModalProps) {
   const [view, setView] = useState<"details" | "checkout">("details");
+  const router = useRouter();
 
   // 1. Get Hooks
   const user = useAuthStore((state) => state.user);
@@ -48,12 +50,18 @@ export function ProductDetailModal({
 
   // 3. Define Event Handlers
   const handleConfirmPurchase = () => {
+    // --- THIS IS THE CHANGE ---
+    // We must pass the full product object for the optimistic update
+    // The `product!` assertion is safe because this handler is only
+    // callable when the product has been loaded.
     purchase(
-      { productId },
+      { product: product! },
+      // --- END CHANGE ---
       {
         onSuccess: () => {
           onClose();
           setTimeout(() => setView("details"), 300);
+          router.push("/library");
         },
       }
     );

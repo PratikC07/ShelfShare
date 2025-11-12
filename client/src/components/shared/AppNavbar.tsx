@@ -13,14 +13,14 @@ import {
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation"; // <-- IMPORT useRouter
 import { Menu as HeadlessMenu, Transition } from "@headlessui/react";
 
 import { useAuthStore } from "@/store/auth.store";
 import { cn } from "@/lib/utils";
 import { type User as AuthUser } from "@/features/auth/types"; // Import our central User type
 
-// Define navigation links for authenticated users
+// ... (navLinks definition is unchanged) ...
 const navLinks = [
   { href: "/products", label: "Products", icon: ShoppingBag },
   { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -30,6 +30,7 @@ const navLinks = [
 export function AppNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const pathname = usePathname();
+  const router = useRouter(); // <-- INITIALIZE ROUTER
 
   //
   // --- FIX 1: Use granular selectors ---
@@ -41,8 +42,10 @@ export function AppNavbar() {
 
   const handleLogout = () => {
     logout();
-    // Optionally, redirect to home or login page
-    // router.push('/');
+    // --- THIS IS THE FIX ---
+    // Redirect to landing page on logout
+    router.replace("/");
+    // --- END FIX ---
   };
 
   return (
@@ -50,7 +53,7 @@ export function AppNavbar() {
       <nav className="flex items-center justify-between px-4 py-4 sm:px-10 lg:px-20">
         <Logo />
 
-        {/* --- Desktop Nav --- */}
+        {/* ... (rest of desktop nav is unchanged) ... */}
         <div className="hidden flex-1 items-center justify-center md:flex">
           {user && (
             <div className="flex items-center gap-6">
@@ -72,7 +75,7 @@ export function AppNavbar() {
           )}
         </div>
 
-        {/* --- Auth Buttons & User Menu (Desktop) --- */}
+        {/* ... (rest of auth buttons are unchanged) ... */}
         <div className="hidden items-center gap-4 md:flex">
           {user ? (
             <UserDropdown user={user} onLogout={handleLogout} />
@@ -104,6 +107,7 @@ export function AppNavbar() {
         <div className="flex flex-col gap-4 px-4 pb-4 md:hidden">
           {user ? (
             <>
+              {/* ... (mobile nav links are unchanged) ... */}
               {navLinks.map((link) => (
                 <Button
                   key={link.href}
@@ -122,6 +126,7 @@ export function AppNavbar() {
                 </Button>
               ))}
               <div className="my-2 border-t border-slate-200 dark:border-slate-700"></div>
+              {/* ... (mobile user info is unchanged) ... */}
               <div className="flex items-center gap-3 px-4 py-2">
                 <User className="h-6 w-6 rounded-full bg-slate-200 p-1 dark:bg-slate-700" />
                 <div className="flex flex-col">
@@ -137,7 +142,7 @@ export function AppNavbar() {
                 variant="secondary"
                 size="default"
                 onClick={() => {
-                  handleLogout();
+                  handleLogout(); // This function now includes the redirect
                   setIsMobileMenuOpen(false);
                 }}
                 className="flex w-full justify-start gap-3"
@@ -163,7 +168,7 @@ export function AppNavbar() {
 }
 
 //
-// --- FIX 2: Use the correct User type, not 'any' ---
+// ... (UserDropdown component is unchanged) ...
 //
 function UserDropdown({
   user,
@@ -185,7 +190,7 @@ function UserDropdown({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <HeadlessMenu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-xl bg-white p-2 shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-slate-800 dark:ring-white/10">
+        <HeadlessMenu.Items className="absolute right-0 mt-2 w-56 origin-top-right rounded-lg bg-white p-2 shadow-lg ring-1 ring-black/5 focus:outline-none dark:bg-slate-800 dark:ring-white/10">
           <div className="border-b border-slate-200 px-3 py-2 dark:border-slate-700">
             <p className="truncate text-sm font-medium text-slate-900 dark:text-white">
               {user.name}

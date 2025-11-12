@@ -4,7 +4,8 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
-import { CheckCircle, XCircle } from "lucide-react"; // Import icons
+import { CheckCircle, XCircle } from "lucide-react";
+import { AuthHandler } from "@/components/shared/AuthHandler"; // <-- IMPORT
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(
@@ -29,9 +30,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           // Add a base class for all toasts
           className: "toast-base",
 
-          // Remove the invalid 'dark' key and base 'style'
-
-          // Success toast styles
+          // ... (rest of toaster options) ...
           success: {
             duration: 2000,
             icon: <CheckCircle className="text-primary" />,
@@ -48,6 +47,10 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           },
         }}
       />
+
+      {/* ADD THE AUTH HANDLER HERE */}
+      <AuthHandler />
+
       {children}
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>

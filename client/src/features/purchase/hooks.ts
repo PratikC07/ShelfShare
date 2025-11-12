@@ -1,20 +1,21 @@
 "use client";
 
-// Import useQuery
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
-// Import new api function
 import { purchaseProduct, getMyPurchases } from "./api";
 import {
   type PurchaseRequest,
   type PurchaseResponse,
   type PurchasedProduct,
 } from "./types";
+import { type ProductDetail } from "@/features/products/types";
 
 /**
  * Hook for handling a product purchase.
  * Encapsulates all API logic, state, and side effects.
+ *
+ * Implements an optimistic update for a faster UI response.
  */
 export const usePurchaseProduct = () => {
   const queryClient = useQueryClient();
@@ -22,16 +23,45 @@ export const usePurchaseProduct = () => {
   return useMutation<
     PurchaseResponse,
     AxiosError<{ message: string; error?: string }>,
-    PurchaseRequest
+    { product: ProductDetail },
+    // --- THIS IS THE FIX ---
+    // We explicitly type the 'context' object that onMutate returns.
+    { previousPurchases: PurchasedProduct[] }
+    // --- END FIX ---
   >({
-    mutationFn: purchaseProduct,
+    mutationFn: ({ product }) => purchaseProduct({ productId: product._id }),
+
+    onMutate: async ({ product }) => {
+      await queryClient.cancelQueries({ queryKey: ["myPurchases"] });
+
+      const previousPurchases =
+        queryClient.getQueryData<PurchasedProduct[]>(["myPurchases"]) || [];
+
+      const newPurchasedProduct: PurchasedProduct = {
+        _id: product._id,
+        name: product.name,
+        imageUrl: product.imageUrl,
+        downloadUrl: product.downloadUrl,
+      };
+
+      queryClient.setQueryData<PurchasedProduct[]>(["myPurchases"], (old) => [
+        ...(old || []),
+        newPurchasedProduct,
+      ]);
+
+      return { previousPurchases };
+    },
+
     onSuccess: (data) => {
       toast.success(data.message);
-      // Invalidate user data that is now stale
-      queryClient.invalidateQueries({ queryKey: ["myPurchases"] });
-      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     },
-    onError: (error) => {
+
+    // 'context' is now correctly typed, and 'context.previousPurchases' is valid.
+    onError: (error, variables, context) => {
+      if (context?.previousPurchases) {
+        queryClient.setQueryData(["myPurchases"], context.previousPurchases);
+      }
+
       let errorMessage = "Purchase failed. Please try again.";
       if (error.response) {
         if (error.response.status === 400) {
@@ -41,6 +71,11 @@ export const usePurchaseProduct = () => {
         }
       }
       toast.error(errorMessage);
+    },
+
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["myPurchases"] });
+      queryClient.invalidateQueries({ queryKey: ["dashboardStats"] });
     },
   });
 };
@@ -53,9 +88,5 @@ export const useGetMyPurchases = () => {
     queryKey: ["myPurchases"],
     queryFn: getMyPurchases,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    // We only want to run this query if the user is authenticated
-    // The apiClient interceptor will handle 401s, but this
-    // hook might be used by a logged-out user.
-    // We'll let it run and handle the 'isOwned' logic in the component.
   });
 };

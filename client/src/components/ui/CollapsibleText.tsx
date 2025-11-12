@@ -6,10 +6,15 @@ import { cn } from "@/lib/utils";
 interface CollapsibleTextProps {
   text: string;
   /**
-   * Approx. character count to truncate at.
-   * "line-clamp" is not 100% reliable for this.
+   * The number of lines to truncate the text to.
+   * @default 3
    */
-  truncateAt?: number;
+  lines?: number;
+  /**
+   * Approx. character count to show the "Show more" button.
+   * @default 200
+   */
+  characterThreshold?: number;
 }
 
 /**
@@ -18,17 +23,19 @@ interface CollapsibleTextProps {
  */
 export function CollapsibleText({
   text,
-  truncateAt = 200,
+  lines = 3,
+  characterThreshold = 200,
 }: CollapsibleTextProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const needsTruncation = text.length > truncateAt;
+  const needsTruncation = text.length > characterThreshold;
 
   return (
     <div className="relative">
       <p
         className={cn(
           "text-base font-normal leading-relaxed text-slate-600 dark:text-slate-400",
-          !isExpanded && needsTruncation && "line-clamp-3"
+          // Use arbitrary value for dynamic line clamping
+          !isExpanded && needsTruncation && `line-clamp-[${lines}]`
         )}
       >
         {text}

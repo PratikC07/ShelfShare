@@ -32,7 +32,7 @@ export const useRegister = () => {
     onSuccess: (data) => {
       toast.success("Account created successfully!");
       login(data.data);
-      router.push("/products");
+      router.replace("/products");
     },
     onError: (error) => {
       let errorMessage = "An unknown error occurred.";
@@ -69,7 +69,7 @@ export const useLogin = () => {
     onSuccess: (data) => {
       toast.success("Logged in successfully!");
       login(data.data);
-      router.push("/products"); // Redirect to dashboard or home
+      router.replace("/products"); // Redirect to dashboard or home
     },
     onError: (error) => {
       // Per API docs, 401 is the main error
