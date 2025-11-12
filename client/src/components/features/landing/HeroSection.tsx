@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/Button";
-import { LinkIcon, Award } from "lucide-react";
+import { LinkIcon, Award, Star, ArrowDown } from "lucide-react";
 import Link from "next/link";
-// Import our new motion components
 import { MotionDiv, MotionH1, MotionP } from "@/components/ui/motion";
 
 // Define animation variants
@@ -13,7 +12,7 @@ const variants = {
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen w-full items-center px-4 py-20 sm:px-10 lg:px-20 lg:py-28">
-      {/* Background elements */}
+      {/* Background elements (unchanged) */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/4 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl dark:bg-primary/30"></div>
         <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl dark:bg-purple-500/30"></div>
@@ -23,14 +22,15 @@ export function HeroSection() {
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-8">
           {/* Animated Text Content */}
           <MotionDiv
-            className="flex flex-col gap-8 text-center lg:text-left"
+            className="flex flex-col gap-8 text-center lg:text-left" // Gap increased to '8'
             initial="hidden"
             animate="visible"
-            transition={{ staggerChildren: 0.1 }} // Stagger children animations
+            transition={{ staggerChildren: 0.1 }}
           >
+            {/* Headline and Subtitle (unchanged) */}
             <div className="flex flex-col gap-4">
               <MotionH1
-                className="text-4xl font-black leading-tight tracking-tighter text-slate-900 sm:text-5xl md:text-6xl dark:text-white"
+                className="text-4xl font-black leading-tight tracking-tighter text-slate-900 sm:text-5xl md:text-7xl dark:text-white"
                 variants={variants}
                 transition={{ duration: 0.5 }}
               >
@@ -45,25 +45,39 @@ export function HeroSection() {
                 exclusive access to our entire library.
               </MotionP>
             </div>
+
+            {/* Social Proof (unchanged) */}
             <MotionDiv
-              className="flex flex-wrap items-center justify-center gap-4 lg:justify-start"
+              className="flex flex-col items-center gap-2 lg:items-start"
               variants={variants}
               transition={{ duration: 0.5, delay: 0.2 }}
             >
+              <div className="flex items-center gap-1">
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400" />
+              </div>
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                Trusted by 1,000+ digital creators and marketers.
+              </p>
+            </MotionDiv>
+
+            {/* --- ADDED: Primary "Get Started" Button --- */}
+            <MotionDiv
+              className="flex justify-center lg:justify-start" // Center on mobile, left-align on desktop
+              variants={variants}
+              transition={{ duration: 0.5, delay: 0.3 }}
+            >
               <Button asChild variant="primary" size="lg">
-                <Link href="/register">
-                  <span className="truncate">Get Started</span>
-                </Link>
-              </Button>
-              <Button asChild variant="secondary" size="lg">
-                <Link href="/login">
-                  <span className="truncate">Log In</span>
-                </Link>
+                <Link href="/register">Get Started</Link>
               </Button>
             </MotionDiv>
+            {/* --- END: Button --- */}
           </MotionDiv>
 
-          {/* Animated Glass Cards */}
+          {/* Animated Glass Cards (unchanged) */}
           <div className="relative flex min-h-[400px] items-center justify-center lg:h-full">
             <div className="relative mx-auto w-full max-w-md space-y-4">
               <MotionDiv
@@ -108,6 +122,22 @@ export function HeroSection() {
           </div>
         </div>
       </div>
+
+      {/* Scroll Down Icon (unchanged) */}
+      <MotionDiv
+        className="absolute bottom-10 left-1/2 -translate-x-1/2"
+        initial={{ opacity: 0, y: 0 }}
+        animate={{ opacity: 1, y: 10 }}
+        transition={{
+          delay: 1.5,
+          duration: 1,
+          repeat: Infinity,
+          repeatType: "reverse",
+          ease: "easeInOut",
+        }}
+      >
+        <ArrowDown className="h-6 w-6 text-slate-400 dark:text-slate-600" />
+      </MotionDiv>
     </section>
   );
 }

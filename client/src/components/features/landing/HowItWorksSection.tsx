@@ -16,7 +16,10 @@ const scrollVariant = {
 
 export function HowItWorksSection() {
   return (
-    <section className="w-full bg-slate-100 py-12 md:py-24 dark:bg-slate-900">
+    <section
+      id="how-it-works" // <-- Add ID for anchor link
+      className="w-full bg-slate-100 py-12 md:py-24 dark:bg-slate-900"
+    >
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
         <MotionDiv
           className="mb-12 flex flex-col items-center text-center"

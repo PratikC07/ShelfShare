@@ -16,7 +16,10 @@ const scrollVariant = {
 
 export function SocialProofSection() {
   return (
-    <section className="w-full py-16 sm:py-24">
+    <section
+      id="testimonials" // <-- Add ID for anchor link
+      className="w-full py-16 sm:py-24"
+    >
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <MotionDiv
           className="mb-12 flex flex-col items-center justify-center sm:mb-16"

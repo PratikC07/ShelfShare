@@ -8,15 +8,17 @@ body {
 
 /* Glassmorphism card effect from heading.html */
 .glass-card {
-  background-color: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  /* --- FIX: Increased blur for a better overlay effect --- */
+  background-color: rgba(255, 255, 255, 0.6); /* Was 0.4 */
+  backdrop-filter: blur(16px); /* Was 10px */
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .dark .glass-card {
-  background-color: rgba(30, 41, 59, 0.4); /* slate-800 with opacity */
-  border-color: rgba(71, 85, 105, 0.3); /* slate-600 with opacity */
+  /* --- FIX: Increased blur for a better overlay effect --- */
+  background-color: rgba(30, 41, 59, 0.6); /* Was 0.4 */
+  border-color: rgba(71, 85, 105, 0.3);
 }
 
 /* Add new layer for custom toast component styles */

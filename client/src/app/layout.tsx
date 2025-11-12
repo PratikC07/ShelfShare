@@ -16,7 +16,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    // --- THIS IS THE FIX ---
+    <html lang="en" className="scroll-smooth">
+      {/* --- END FIX --- */}
       <body className={inter.className}>
         {/* Wrap the children in our Providers component */}
         <Providers>{children}</Providers>

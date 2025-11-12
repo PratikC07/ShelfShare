@@ -10,13 +10,16 @@ const nextConfig: NextConfig = {
         port: "",
         pathname: "/**",
       },
-      // This is the line that fixes the error
+      // --- THIS IS THE FIX ---
+      // We are removing the old "placehold.co"
+      // and adding the new, high-quality image provider
       {
         protocol: "https",
-        hostname: "placehold.co",
+        hostname: "images.unsplash.com",
         port: "",
         pathname: "/**",
       },
+      // --- END FIX ---
       {
         protocol: "https",
         hostname: "**", // The double asterisk is a wildcard

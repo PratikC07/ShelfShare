@@ -14,7 +14,7 @@ export function Logo() {
           ></path>
         </svg>
       </div>
-      <h2 className="text-lg font-bold leading-tight tracking-tighter">
+      <h2 className="text-xl font-bold leading-tight tracking-tighter">
         ShelfShare
       </h2>
     </Link>

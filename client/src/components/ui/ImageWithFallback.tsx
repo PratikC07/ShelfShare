@@ -1,36 +1,36 @@
 "use client";
 
-import { useState } from "react"; // Removed useEffect
+import { useState } from "react";
 import Image, { type ImageProps } from "next/image";
-import { ImageOff } from "lucide-react"; // A nice fallback icon
+import { ImageOff, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
  * A wrapper for `next/image` that gracefully handles
- * loading errors by displaying a fallback placeholder.
+ * loading errors and displays a loading spinner.
  */
 export function ImageWithFallback(props: ImageProps) {
-  const { src, alt, className, ...rest } = props;
+  // --- START FIX ---
+  // Explicitly destructure `fill` so it's not in `...rest`.
+  const { src, alt, className, fill, ...rest } = props;
+  // --- END FIX ---
 
-  // --- FIX ---
-  // Instead of a simple boolean, we store the `src` that failed.
+  const [finishedLoadingSrc, setFinishedLoadingSrc] = useState<string | null>(
+    null
+  );
   const [errorSrc, setErrorSrc] = useState<string | null>(null);
 
-  // We derive the error state *during* rendering.
-  // If the current `src` is the one that failed, we have an error.
-  // If `src` changes to a new image, this will be false,
-  // giving the new image a chance to load.
   const hasError = errorSrc === src;
-  // --- END FIX ---
+  const isLoading = finishedLoadingSrc !== src && !hasError;
 
   if (hasError || !src) {
     return (
       <div
         className={cn(
           "flex h-full w-full items-center justify-center bg-slate-100 text-slate-400 dark:bg-slate-800 dark:text-slate-600",
-          className // Pass through consumer's layout classes
+          className
         )}
-        // Pass through other props like 'fill' which might be on the parent
+        // `...rest` is now safe to spread because `fill` is no longer in it.
         {...rest}
       >
         <ImageOff className="h-12 w-12" />
@@ -39,16 +39,35 @@ export function ImageWithFallback(props: ImageProps) {
   }
 
   return (
-    <Image
-      alt={alt}
-      src={src}
-      className={className}
-      onError={() => {
-        // This fires if the image fails to load.
-        // We save the `src` of the *specific* image that failed.
-        setErrorSrc(src as string);
-      }}
-      {...rest}
-    />
+    // Note: We don't pass `fill` to this wrapper div, only to the Image component.
+    <div className={cn("relative h-full w-full", className)}>
+      {isLoading && (
+        <div className="absolute inset-0 z-10 flex items-center justify-center bg-slate-100 dark:bg-slate-800">
+          <Loader2 className="h-8 w-8 animate-spin text-slate-400 dark:text-slate-600" />
+        </div>
+      )}
+
+      <Image
+        alt={alt}
+        src={src}
+        // --- START FIX ---
+        // Pass the `fill` prop explicitly to the Next.js Image component.
+        fill={fill}
+        // --- END FIX ---
+        className={cn(
+          "h-full w-full object-cover",
+          "transition-opacity duration-300",
+          isLoading ? "opacity-0" : "opacity-100" // Fade in
+        )}
+        onLoad={() => {
+          setFinishedLoadingSrc(src as string);
+        }}
+        onError={() => {
+          setErrorSrc(src as string);
+        }}
+        // `...rest` is also safe here.
+        {...rest}
+      />
+    </div>
   );
 }
