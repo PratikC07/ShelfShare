@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/Input";
 import { MotionDiv } from "@/components/ui/motion";
 
 // 1. Import our new, separated login logic
-import { loginSchema, type LoginSchema } from "@/app/(auth)/validation";
-import { useLogin } from "@/app/(auth)/hooks";
+import { loginSchema, type LoginSchema } from "@/features/auth/validation";
+import { useLogin } from "@/features/auth/hooks";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);

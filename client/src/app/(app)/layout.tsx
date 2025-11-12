@@ -1,15 +1,11 @@
 import { Footer } from "@/components/shared/Footer";
-import { Navbar } from "@/components/shared/Navbar";
+import { AppNavbar } from "@/components/shared/AppNavbar";
 
-export default function MainLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
       <div className="flex h-full grow flex-col">
-        <Navbar />
+        <AppNavbar />
         <main className="flex-1">{children}</main>
         <Footer />
       </div>

@@ -6,7 +6,7 @@ import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import Link from "next/link";
 
-export function Navbar() {
+export function LandingNavbar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   return (
@@ -14,8 +14,7 @@ export function Navbar() {
       <nav className="flex items-center justify-between px-4 py-4 sm:px-10 lg:px-20">
         <Logo />
 
-        {/* --- SOLUTION --- */}
-        {/* Desktop Nav: We keep the flex-1 and justify-end to push the button to the right. */}
+        {/* --- Desktop: "Log In" Button Only --- */}
         <div className="hidden items-center gap-8 md:flex flex-1 justify-end">
           <Button asChild variant="primary" size="default">
             <Link href="/login">
@@ -24,10 +23,8 @@ export function Navbar() {
           </Button>
         </div>
 
-        {/* Mobile Nav: We still need the menu button for mobile (to show the Log In button) */}
+        {/* --- Mobile Nav Button --- */}
         <div className="md:hidden">
-          {/* --- END SOLUTION --- */}
-
           <button
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             className="rounded-lg p-2 text-slate-700 dark:text-slate-300"
@@ -37,8 +34,7 @@ export function Navbar() {
         </div>
       </nav>
 
-      {/* --- SOLUTION --- */}
-      {/* Mobile Menu: We remove the extra links here as well. */}
+      {/* --- Mobile Menu: "Log In" Button Only --- */}
       {isMobileMenuOpen && (
         <div className="flex flex-col gap-4 px-4 pb-4 md:hidden">
           <Button asChild variant="primary" size="default">
@@ -48,7 +44,6 @@ export function Navbar() {
           </Button>
         </div>
       )}
-      {/* --- END SOLUTION --- */}
     </header>
   );
 }

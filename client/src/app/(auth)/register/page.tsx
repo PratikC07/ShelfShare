@@ -12,8 +12,11 @@ import { Input } from "@/components/ui/Input";
 import { MotionDiv } from "@/components/ui/motion";
 
 // 1. Import our new, separated logic
-import { registerSchema, type RegisterSchema } from "@/app/(auth)/validation";
-import { useRegister } from "@/app/(auth)/hooks";
+import {
+  registerSchema,
+  type RegisterSchema,
+} from "@/features/auth/validation";
+import { useRegister } from "@/features/auth/hooks";
 
 /**
  * The inner form component that uses our custom hook
