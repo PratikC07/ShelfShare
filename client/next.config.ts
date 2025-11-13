@@ -4,29 +4,15 @@ const nextConfig: NextConfig = {
   /* config options here */
   images: {
     remotePatterns: [
+      // For your product data
       {
         protocol: "https",
-        hostname: "lh3.googleusercontent.com",
-        port: "",
-        pathname: "/**",
-      },
-      // --- THIS IS THE FIX ---
-      // We are removing the old "placehold.co"
-      // and adding the new, high-quality image provider
-      {
-        protocol: "https",
-        hostname: "images.unsplash.com",
-        port: "",
-        pathname: "/**",
-      },
-      // --- END FIX ---
-      {
-        protocol: "https",
-        hostname: "**", // The double asterisk is a wildcard
+        hostname: "n6ky3pneh7v41k1z.public.blob.vercel-storage.com",
         port: "",
         pathname: "/**",
       },
     ],
+    unoptimized: true,
   },
 };
 

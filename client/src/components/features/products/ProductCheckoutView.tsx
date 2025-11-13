@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
 import { type ProductDetail } from "@/features/products/types";
 import { formatCurrency } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 interface ProductCheckoutViewProps {
   product: ProductDetail;
@@ -14,10 +15,6 @@ interface ProductCheckoutViewProps {
   isPurchasing: boolean;
 }
 
-/**
- * The "Checkout" view of the product modal.
- * This is a "dumb" component that just renders props.
- */
 export function ProductCheckoutView({
   product,
   onBack,
@@ -56,10 +53,16 @@ export function ProductCheckoutView({
             className="object-cover"
           />
         </div>
-        <div className="flex-grow">
-          <h3 className="font-semibold text-slate-900 dark:text-white">
+        <div className="flex-grow overflow-hidden">
+          <h3
+            className={cn(
+              "font-semibold text-slate-900 dark:text-white",
+              "line-clamp-3"
+            )}
+          >
             {product.name}
           </h3>
+
           <p className="text-slate-600 dark:text-slate-400">
             One-time purchase
           </p>

@@ -2,9 +2,6 @@ import Link from "next/link";
 import { ShoppingBag } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
-/**
- * A placeholder component shown when the user's library is empty.
- */
 export function LibraryEmptyState() {
   return (
     <div className="flex flex-col items-center justify-center rounded-xl border-2 border-dashed border-slate-300 bg-white p-12 text-center dark:border-slate-700 dark:bg-slate-800/50">

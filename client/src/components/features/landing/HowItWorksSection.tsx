@@ -1,8 +1,6 @@
 import { Share2, Users, Gift } from "lucide-react";
-// Import our new motion components
 import { MotionDiv, MotionH2, MotionP } from "@/components/ui/motion";
 
-// Define animation variants for scroll-triggered animations
 const scrollVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -17,15 +15,15 @@ const scrollVariant = {
 export function HowItWorksSection() {
   return (
     <section
-      id="how-it-works" // <-- Add ID for anchor link
+      id="how-it-works"
       className="w-full bg-slate-100 py-12 md:py-24 dark:bg-slate-900"
     >
       <div className="mx-auto w-full max-w-5xl px-4 sm:px-6 lg:px-8">
         <MotionDiv
           className="mb-12 flex flex-col items-center text-center"
           initial="hidden"
-          whileInView="visible" // Triggers animation on scroll
-          viewport={{ once: true, amount: 0.3 }} // Animate once when 30% visible
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.3 }}
           transition={{ staggerChildren: 0.1 }}
           variants={scrollVariant}
         >
@@ -90,7 +88,6 @@ export function HowItWorksSection() {
   );
 }
 
-// ... StepCard sub-component remains unchanged ...
 function StepCard({
   icon,
   title,

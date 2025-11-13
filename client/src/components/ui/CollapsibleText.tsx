@@ -5,22 +5,10 @@ import { cn } from "@/lib/utils";
 
 interface CollapsibleTextProps {
   text: string;
-  /**
-   * The number of lines to truncate the text to.
-   * @default 3
-   */
   lines?: number;
-  /**
-   * Approx. character count to show the "Show more" button.
-   * @default 200
-   */
   characterThreshold?: number;
 }
 
-/**
- * A component that truncates text and provides a
- * "Show more" / "Show less" button.
- */
 export function CollapsibleText({
   text,
   lines = 3,
@@ -34,19 +22,48 @@ export function CollapsibleText({
       <p
         className={cn(
           "text-base font-normal leading-relaxed text-slate-600 dark:text-slate-400",
-          // Use arbitrary value for dynamic line clamping
-          !isExpanded && needsTruncation && `line-clamp-[${lines}]`
+          "text-justify"
         )}
+        style={
+          !isExpanded && needsTruncation
+            ? {
+                display: "-webkit-box",
+                WebkitBoxOrient: "vertical",
+                WebkitLineClamp: lines,
+                overflow: "hidden",
+              }
+            : undefined
+        }
       >
         {text}
       </p>
-      {needsTruncation && (
-        <button
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="mt-2 text-sm font-medium text-primary hover:underline"
+
+      {!isExpanded && needsTruncation && (
+        <div
+          className={cn(
+            "absolute bottom-0 right-0 flex h-[1.65rem] items-center",
+            "bg-white dark:bg-slate-900 ",
+            "pl-1"
+          )}
         >
-          {isExpanded ? "Show less" : "Show more"}
-        </button>
+          <button
+            onClick={() => setIsExpanded(true)}
+            className="text-sm font-medium text-primary hover:underline"
+          >
+            Show more
+          </button>
+        </div>
+      )}
+
+      {isExpanded && needsTruncation && (
+        <div className="flex justify-end">
+          <button
+            onClick={() => setIsExpanded(false)}
+            className="mt-2 text-sm font-medium text-primary hover:underline"
+          >
+            Show less
+          </button>
+        </div>
       )}
     </div>
   );

@@ -17,17 +17,12 @@ import {
 } from "@/components/features/dashboard/ReferralCard";
 
 export default function DashboardPage() {
-  // 1. Fetch initial data
   const { data, isLoading, isError, error } = useGetDashboardStats();
-
-  // 2. Connect to the real-time stream
-  // This hook works in the background and updates the `data` above.
   useDashboardStream();
 
-  // 3. Calculate derived state (Conversion Rate)
   const conversionRate = useMemo(() => {
     if (!data || !data.referredUsersCount) {
-      return 0; // Avoid divide-by-zero
+      return 0;
     }
     return (data.convertedUsersCount / data.referredUsersCount) * 100;
   }, [data]);
@@ -35,7 +30,7 @@ export default function DashboardPage() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-3">
           <ReferralCardSkeleton />
           <StatCardSkeleton />
           <StatCardSkeleton />
@@ -57,9 +52,8 @@ export default function DashboardPage() {
       );
     }
 
-    // 4. Render the full dashboard with data
     return (
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+      <div className="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-3">
         <ReferralCard referralCode={data.referralCode} />
         <StatCard
           title="Total Credits Earned"
@@ -94,7 +88,7 @@ export default function DashboardPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
       >
-        <MotionH1 className="text-4xl font-black tracking-tighter text-slate-900 dark:text-white">
+        <MotionH1 className="text-4xl font-black tracking-tighter text-slate-900 sm:text-5xl dark:text-white">
           Your Dashboard
         </MotionH1>
       </MotionDiv>

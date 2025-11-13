@@ -10,9 +10,6 @@ interface StatCardProps {
   valueClassName?: string;
 }
 
-/**
- * A reusable "Bento Box" card for displaying a single stat.
- */
 export function StatCard({
   title,
   value,
@@ -38,7 +35,7 @@ export function StatCard({
       </div>
       <p
         className={cn(
-          "text-5xl font-black leading-tight tracking-tighter text-slate-900 dark:text-white",
+          "text-4xl sm:text-5xl font-black leading-tight tracking-tighter text-slate-900 dark:text-white",
           valueClassName
         )}
       >
@@ -48,14 +45,11 @@ export function StatCard({
   );
 }
 
-/**
- * A skeleton placeholder for the StatCard.
- */
 export function StatCardSkeleton() {
   return (
     <div
       className="flex flex-col justify-between gap-4 rounded-xl bg-white p-6 shadow-lg dark:bg-slate-800"
-      style={{ minHeight: "150px" }} // Give skeleton a defined height
+      style={{ minHeight: "150px" }}
     >
       <div className="h-5 w-1/2 animate-pulse rounded bg-slate-200 dark:bg-slate-700"></div>
       <div className="h-12 w-3/4 animate-pulse rounded bg-slate-200 dark:bg-slate-700"></div>

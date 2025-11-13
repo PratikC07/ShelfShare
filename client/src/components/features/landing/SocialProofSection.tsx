@@ -1,8 +1,6 @@
 import { UserCircle2 } from "lucide-react";
-// Import our new motion components
 import { MotionDiv, MotionH2, MotionP } from "@/components/ui/motion";
 
-// Define animation variants for scroll-triggered animations
 const scrollVariant = {
   hidden: { opacity: 0, y: 30 },
   visible: {
@@ -16,10 +14,7 @@ const scrollVariant = {
 
 export function SocialProofSection() {
   return (
-    <section
-      id="testimonials" // <-- Add ID for anchor link
-      className="w-full py-16 sm:py-24"
-    >
+    <section id="testimonials" className="w-full py-16 sm:py-24">
       <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
         <MotionDiv
           className="mb-12 flex flex-col items-center justify-center sm:mb-16"
@@ -103,7 +98,6 @@ export function SocialProofSection() {
   );
 }
 
-// ... TestimonialCard sub-component remains unchanged ...
 function TestimonialCard({
   quote,
   name,
@@ -119,7 +113,6 @@ function TestimonialCard({
         <p className="text-base leading-relaxed">{quote}</p>
       </blockquote>
       <div className="mt-6 flex items-center gap-4">
-        {/* Using an icon as a placeholder for the avatar */}
         <UserCircle2 className="h-12 w-12 text-slate-400" />
         <div>
           <p className="font-semibold text-gray-900 dark:text-white">{name}</p>

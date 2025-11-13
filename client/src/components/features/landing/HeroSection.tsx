@@ -3,7 +3,6 @@ import { LinkIcon, Award, Star, ArrowDown } from "lucide-react";
 import Link from "next/link";
 import { MotionDiv, MotionH1, MotionP } from "@/components/ui/motion";
 
-// Define animation variants
 const variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0 },
@@ -12,7 +11,6 @@ const variants = {
 export function HeroSection() {
   return (
     <section className="relative flex min-h-screen w-full items-center px-4 py-20 sm:px-10 lg:px-20 lg:py-28">
-      {/* Background elements (unchanged) */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute left-1/2 top-1/2 h-64 w-64 -translate-x-1/4 -translate-y-1/2 rounded-full bg-primary/20 blur-3xl dark:bg-primary/30"></div>
         <div className="absolute bottom-0 right-0 h-48 w-48 rounded-full bg-purple-500/20 blur-3xl dark:bg-purple-500/30"></div>
@@ -20,14 +18,13 @@ export function HeroSection() {
 
       <div className="mx-auto max-w-7xl">
         <div className="grid grid-cols-1 items-center gap-16 lg:grid-cols-2 lg:gap-8">
-          {/* Animated Text Content */}
+          {/* Animated Text Content (unchanged) */}
           <MotionDiv
             className="flex flex-col gap-8 text-center lg:text-left" // Gap increased to '8'
             initial="hidden"
             animate="visible"
             transition={{ staggerChildren: 0.1 }}
           >
-            {/* Headline and Subtitle (unchanged) */}
             <div className="flex flex-col gap-4">
               <MotionH1
                 className="text-4xl font-black leading-tight tracking-tighter text-slate-900 sm:text-5xl md:text-7xl dark:text-white"
@@ -45,8 +42,6 @@ export function HeroSection() {
                 exclusive access to our entire library.
               </MotionP>
             </div>
-
-            {/* Social Proof (unchanged) */}
             <MotionDiv
               className="flex flex-col items-center gap-2 lg:items-start"
               variants={variants}
@@ -63,10 +58,8 @@ export function HeroSection() {
                 Trusted by 1,000+ digital creators and marketers.
               </p>
             </MotionDiv>
-
-            {/* --- ADDED: Primary "Get Started" Button --- */}
             <MotionDiv
-              className="flex justify-center lg:justify-start" // Center on mobile, left-align on desktop
+              className="flex justify-center lg:justify-start"
               variants={variants}
               transition={{ duration: 0.5, delay: 0.3 }}
             >
@@ -74,12 +67,11 @@ export function HeroSection() {
                 <Link href="/register">Get Started</Link>
               </Button>
             </MotionDiv>
-            {/* --- END: Button --- */}
           </MotionDiv>
 
           {/* Animated Glass Cards (unchanged) */}
           <div className="relative flex min-h-[400px] items-center justify-center lg:h-full">
-            <div className="relative mx-auto w-full max-w-md space-y-4">
+            <div className="relative mx-auto w-full max-w-md space-y-4 ">
               <MotionDiv
                 className="relative z-10 w-full -rotate-3 rounded-xl p-6 shadow-xl glass-card"
                 initial={{ opacity: 0, x: 50, rotate: -3 }}
@@ -123,7 +115,6 @@ export function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll Down Icon (unchanged) */}
       <MotionDiv
         className="absolute bottom-10 left-1/2 -translate-x-1/2"
         initial={{ opacity: 0, y: 0 }}
@@ -136,7 +127,13 @@ export function HeroSection() {
           ease: "easeInOut",
         }}
       >
-        <ArrowDown className="h-6 w-6 text-slate-400 dark:text-slate-600" />
+        <a
+          href="#how-it-works"
+          aria-label="Scroll to next section"
+          className="rounded-full p-2 transition-colors hover:bg-slate-200/50 dark:hover:bg-slate-800/50"
+        >
+          <ArrowDown className="h-6 w-6 text-slate-400 dark:text-slate-600" />
+        </a>
       </MotionDiv>
     </section>
   );

@@ -1,7 +1,5 @@
 "use client";
 
-// This file exports client-side-only motion components
-// so that our server components can use them
 import {
   motion,
   AnimatePresence,

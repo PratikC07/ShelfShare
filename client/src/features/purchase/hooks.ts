@@ -4,19 +4,9 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
 import { purchaseProduct, getMyPurchases } from "./api";
-import {
-  type PurchaseRequest,
-  type PurchaseResponse,
-  type PurchasedProduct,
-} from "./types";
+import { type PurchaseResponse, type PurchasedProduct } from "./types";
 import { type ProductDetail } from "@/features/products/types";
 
-/**
- * Hook for handling a product purchase.
- * Encapsulates all API logic, state, and side effects.
- *
- * Implements an optimistic update for a faster UI response.
- */
 export const usePurchaseProduct = () => {
   const queryClient = useQueryClient();
 
@@ -24,10 +14,7 @@ export const usePurchaseProduct = () => {
     PurchaseResponse,
     AxiosError<{ message: string; error?: string }>,
     { product: ProductDetail },
-    // --- THIS IS THE FIX ---
-    // We explicitly type the 'context' object that onMutate returns.
     { previousPurchases: PurchasedProduct[] }
-    // --- END FIX ---
   >({
     mutationFn: ({ product }) => purchaseProduct({ productId: product._id }),
 
@@ -56,7 +43,6 @@ export const usePurchaseProduct = () => {
       toast.success(data.message);
     },
 
-    // 'context' is now correctly typed, and 'context.previousPurchases' is valid.
     onError: (error, variables, context) => {
       if (context?.previousPurchases) {
         queryClient.setQueryData(["myPurchases"], context.previousPurchases);
@@ -80,13 +66,10 @@ export const usePurchaseProduct = () => {
   });
 };
 
-/**
- * Hook for fetching the user's library of purchased products.
- */
 export const useGetMyPurchases = () => {
   return useQuery<PurchasedProduct[], AxiosError>({
     queryKey: ["myPurchases"],
     queryFn: getMyPurchases,
-    staleTime: 1000 * 60 * 5, // 5 minutes
+    staleTime: 1000 * 60 * 5,
   });
 };

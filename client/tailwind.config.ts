@@ -7,9 +7,9 @@ const config: Config = {
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
+
   theme: {
     extend: {
-      // These are the custom definitions that were missing
       colors: {
         primary: "#2563EB",
         "background-light": "#F8FAFC",

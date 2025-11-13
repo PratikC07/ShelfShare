@@ -7,13 +7,9 @@ import { cn } from "@/lib/utils";
 
 interface PurchasedProductCardProps {
   product: PurchasedProduct;
-  onView: () => void; // Function to open the detail modal
+  onView: () => void;
 }
 
-/**
- * A minimal, "book cover" style card for the user's library.
- * The entire card is clickable to open the modal.
- */
 export function PurchasedProductCard({
   product,
   onView,
@@ -29,9 +25,8 @@ export function PurchasedProductCard({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.1 }}
       whileHover={{ scale: 1.05 }}
-      onClick={onView} // The whole card is clickable
+      onClick={onView}
     >
-      {/* 1. Image with 3:4 aspect ratio */}
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-lg shadow-lg">
         <ImageWithFallback
           src={product.imageUrl}
@@ -42,11 +37,10 @@ export function PurchasedProductCard({
         />
       </div>
 
-      {/* 2. Centered, truncated title */}
       <div className="pt-3">
         <h3
           className={cn(
-            "line-clamp-2 h-10 text-center text-sm font-semibold", // h-10 ensures 2 lines of space
+            "line-clamp-2 h-10 text-center text-sm font-semibold",
             "text-slate-800 transition-colors group-hover:text-primary",
             "dark:text-slate-200 dark:group-hover:text-primary"
           )}

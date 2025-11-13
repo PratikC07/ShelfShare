@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Providers from "@/lib/providers"; // Import our new providers
+import Providers from "@/lib/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,11 +16,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // --- THIS IS THE FIX ---
-    <html lang="en" className="scroll-smooth">
-      {/* --- END FIX --- */}
+    <html lang="en" className="scroll-smooth" suppressHydrationWarning>
       <body className={inter.className}>
-        {/* Wrap the children in our Providers component */}
         <Providers>{children}</Providers>
       </body>
     </html>

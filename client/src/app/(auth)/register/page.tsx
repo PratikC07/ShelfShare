@@ -11,25 +11,19 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { MotionDiv } from "@/components/ui/motion";
 
-// 1. Import our new, separated logic
 import {
   registerSchema,
   type RegisterSchema,
 } from "@/features/auth/validation";
 import { useRegister } from "@/features/auth/hooks";
 
-/**
- * The inner form component that uses our custom hook
- */
 function RegisterForm() {
   const [showPassword, setShowPassword] = useState(false);
   const searchParams = useSearchParams();
   const referralCodeFromUrl = searchParams.get("referralCode");
 
-  // 2. Call our custom hook to get mutation logic
   const { mutate, isPending } = useRegister();
 
-  // 3. Set up the form
   const {
     register,
     handleSubmit,
@@ -40,12 +34,10 @@ function RegisterForm() {
       name: "",
       email: "",
       password: "",
-      // The referral code is set from the URL but is not a visible field
       referralCode: referralCodeFromUrl || "",
     },
   });
 
-  // 4. The submit handler is now just one line
   const onSubmit: SubmitHandler<RegisterSchema> = (data) => {
     mutate(data);
   };
@@ -112,8 +104,6 @@ function RegisterForm() {
           }
         />
 
-        {/* The referral code input is gone, but the logic works! */}
-
         <div className="flex w-full flex-col items-center gap-4 pt-2">
           <Button
             type="submit"
@@ -138,10 +128,6 @@ function RegisterForm() {
   );
 }
 
-/**
- * Main page component wraps the form in Suspense
- * for useSearchParams to work.
- */
 export default function RegisterPage() {
   return (
     <Suspense>

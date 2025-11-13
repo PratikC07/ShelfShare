@@ -10,15 +10,10 @@ interface ReferralCardProps {
   referralCode: string;
 }
 
-/**
- * A "Bento Box" card for displaying and copying the user's referral link.
- */
 export function ReferralCard({ referralCode }: ReferralCardProps) {
   const [isCopied, setIsCopied] = useState(false);
   const [referralUrl, setReferralUrl] = useState("");
 
-  // We must use useEffect to construct the URL,
-  // as window.location.origin is not available on the server.
   useEffect(() => {
     setReferralUrl(
       `${window.location.origin}/register?referralCode=${referralCode}`
@@ -37,7 +32,6 @@ export function ReferralCard({ referralCode }: ReferralCardProps) {
     );
   };
 
-  // Reset the "Copied!" button after a delay
   useEffect(() => {
     if (isCopied) {
       const timer = setTimeout(() => setIsCopied(false), 2000);
@@ -86,9 +80,6 @@ export function ReferralCard({ referralCode }: ReferralCardProps) {
   );
 }
 
-/**
- * A skeleton placeholder for the ReferralCard.
- */
 export function ReferralCardSkeleton() {
   return (
     <div className="lg:col-span-2 flex flex-col gap-6 rounded-xl bg-white dark:bg-slate-800 p-6 shadow-lg">

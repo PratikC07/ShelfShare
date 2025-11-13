@@ -11,9 +11,6 @@ import { ProductDetailModal } from "@/components/features/products/ProductDetail
 import { MotionDiv, MotionH1 } from "@/components/ui/motion";
 import { cn } from "@/lib/utils";
 
-/**
- * Skeleton loader for the new glassmorphic card
- */
 function CardSkeleton() {
   return (
     <div
@@ -95,7 +92,6 @@ export default function LibraryPage() {
         {renderContent()}
       </main>
 
-      {/* Modal remains the same */}
       <AnimatePresence>
         {selectedProductId && (
           <ProductDetailModal

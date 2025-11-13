@@ -13,7 +13,6 @@ import {
 import { useAuthStore } from "@/store/auth.store";
 import { useRouter } from "next/navigation";
 
-// Import the "dumb" view components
 import { ProductDetailView } from "./ProductDetailView";
 import { ProductCheckoutView } from "./ProductCheckoutView";
 import { ProductModalSkeleton } from "./ProductModalSkeleton";
@@ -23,11 +22,6 @@ interface ProductDetailModalProps {
   onClose: () => void;
 }
 
-/**
- * "Smart" container component for the product detail modal.
- * Handles all data fetching and state logic, then passes
- * props down to the "dumb" view components.
- */
 export function ProductDetailModal({
   productId,
   onClose,
@@ -35,28 +29,20 @@ export function ProductDetailModal({
   const [view, setView] = useState<"details" | "checkout">("details");
   const router = useRouter();
 
-  // 1. Get Hooks
   const user = useAuthStore((state) => state.user);
   const isLoggedIn = !!user;
   const { data: product, isLoading, isError } = useGetProductById(productId);
   const { data: myPurchases } = useGetMyPurchases();
   const { mutate: purchase, isPending: isPurchasing } = usePurchaseProduct();
 
-  // 2. Derive State
   const isOwned = useMemo(
     () => !!myPurchases?.some((p) => p._id === productId),
     [myPurchases, productId]
   );
 
-  // 3. Define Event Handlers
   const handleConfirmPurchase = () => {
-    // --- THIS IS THE CHANGE ---
-    // We must pass the full product object for the optimistic update
-    // The `product!` assertion is safe because this handler is only
-    // callable when the product has been loaded.
     purchase(
       { product: product! },
-      // --- END CHANGE ---
       {
         onSuccess: () => {
           onClose();
@@ -72,7 +58,6 @@ export function ProductDetailModal({
     setTimeout(() => setView("details"), 300);
   };
 
-  // 4. Render Logic
   const renderContent = () => {
     if (isLoading) {
       return <ProductModalSkeleton />;
@@ -111,7 +96,6 @@ export function ProductDetailModal({
     );
   };
 
-  // 5. Render Modal Frame
   return (
     <Transition appear show={!!productId} as={Fragment}>
       <Dialog as="div" className="relative z-50" onClose={handleClose}>

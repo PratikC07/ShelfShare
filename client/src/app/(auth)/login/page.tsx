@@ -10,17 +10,14 @@ import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
 import { MotionDiv } from "@/components/ui/motion";
 
-// 1. Import our new, separated login logic
 import { loginSchema, type LoginSchema } from "@/features/auth/validation";
 import { useLogin } from "@/features/auth/hooks";
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
 
-  // 2. Call our custom hook
   const { mutate, isPending } = useLogin();
 
-  // 3. Set up the form with the login schema
   const {
     register,
     handleSubmit,
@@ -33,7 +30,6 @@ export default function LoginPage() {
     },
   });
 
-  // 4. Submit handler calls the mutate function
   const onSubmit: SubmitHandler<LoginSchema> = (data) => {
     mutate(data);
   };

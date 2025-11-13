@@ -2,20 +2,11 @@ import { type ProductSummary } from "@/features/products/types";
 import { Button } from "@/components/ui/Button";
 import { MotionDiv } from "@/components/ui/motion";
 import { ImageWithFallback } from "@/components/ui/ImageWithFallback";
+import { formatCurrency } from "@/lib/utils";
 
 interface ProductCardProps {
   product: ProductSummary;
-  onViewDetails: () => void; // <-- Add onClick prop
-}
-
-/**
- * Formats a number as USD currency.
- */
-function formatCurrency(amount: number) {
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD",
-  }).format(amount);
+  onViewDetails: () => void;
 }
 
 export function ProductCard({ product, onViewDetails }: ProductCardProps) {
@@ -38,14 +29,13 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
       </div>
       <div className="flex flex-grow flex-col p-6">
         <div className="flex-grow">
-          <h3 className="text-lg font-bold leading-normal text-slate-900 dark:text-white">
+          <h3 className="text-lg font-bold leading-normal text-slate-900 dark:text-white line-clamp-2 h-14">
             {product.name}
           </h3>
           <p className="mt-1 text-base font-normal text-slate-600 dark:text-slate-400">
             {formatCurrency(product.price)}
           </p>
         </div>
-        {/* --- UPDATE: Change from <Link> to onClick --- */}
         <Button
           variant="secondary"
           className="mt-4 w-full"

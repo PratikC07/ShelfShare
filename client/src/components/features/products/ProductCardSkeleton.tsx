@@ -1,6 +1,3 @@
-/**
- * A skeleton placeholder for the ProductCard.
- */
 export function ProductCardSkeleton() {
   return (
     <div className="flex flex-col overflow-hidden rounded-xl bg-white shadow-lg dark:bg-slate-800">

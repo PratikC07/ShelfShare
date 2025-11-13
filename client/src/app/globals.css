@@ -8,7 +8,6 @@ body {
 
 /* Glassmorphism card effect from heading.html */
 .glass-card {
-  /* --- FIX: Increased blur for a better overlay effect --- */
   background-color: rgba(255, 255, 255, 0.6); /* Was 0.4 */
   backdrop-filter: blur(16px); /* Was 10px */
   -webkit-backdrop-filter: blur(16px);
@@ -16,21 +15,16 @@ body {
 }
 
 .dark .glass-card {
-  /* --- FIX: Increased blur for a better overlay effect --- */
   background-color: rgba(30, 41, 59, 0.6); /* Was 0.4 */
   border-color: rgba(71, 85, 105, 0.3);
 }
 
 /* Add new layer for custom toast component styles */
 @layer components {
+  /* This is our one, simple toast style */
   .toast-base {
+    @apply flex items-center gap-3;
     @apply bg-white text-slate-900 rounded-xl p-4 shadow-lg;
     @apply dark:bg-slate-900 dark:text-slate-50;
-  }
-  .toast-success {
-    @apply border border-primary;
-  }
-  .toast-error {
-    @apply border border-red-600;
   }
 }

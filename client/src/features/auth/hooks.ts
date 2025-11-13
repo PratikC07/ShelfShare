@@ -6,13 +6,10 @@ import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
 
 import { useAuthStore } from "@/store/auth.store";
-// Import both API functions
 import { registerUser, loginUser } from "./api";
-// Import both schema types
 import { type RegisterSchema, type LoginSchema } from "./validation";
 import { type AuthSuccessResponse } from "./types";
 
-// --- EXISTING ---
 export const useRegister = () => {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
@@ -55,7 +52,6 @@ export const useRegister = () => {
   };
 };
 
-// --- NEW ---
 export const useLogin = () => {
   const router = useRouter();
   const login = useAuthStore((state) => state.login);
@@ -69,10 +65,9 @@ export const useLogin = () => {
     onSuccess: (data) => {
       toast.success("Logged in successfully!");
       login(data.data);
-      router.replace("/products"); // Redirect to dashboard or home
+      router.replace("/products");
     },
     onError: (error) => {
-      // Per API docs, 401 is the main error
       if (error.response && error.response.status === 401) {
         toast.error("Invalid email or password.");
       } else {

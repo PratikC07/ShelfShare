@@ -1,6 +1,5 @@
 import { z } from "zod";
 
-// --- EXISTING ---
 export const registerSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters"),
   email: z.string().email("Invalid email address"),
@@ -12,8 +11,6 @@ export const registerSchema = z.object({
 });
 export type RegisterSchema = z.infer<typeof registerSchema>;
 
-// --- NEW ---
-// Add the login schema
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(1, "Password is required"),
