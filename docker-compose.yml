@@ -1,18 +1,19 @@
 services:
-  # client:
-  #   build:
-  #     context: .
-  #     dockerfile: ./client/Dockerfile
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./client:/app
-  #     - /app/node_modules
-  #     - /app/.next
-  #   depends_on:
-  #     - server
-  #   networks:
-  #     - shelfshare-network
+  client:
+    build:
+      context: .
+      dockerfile: ./client/Dockerfile
+      args:
+        - NEXT_PUBLIC_API_URL=${BACKEND_URL}
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=${BACKEND_URL}
+    depends_on:
+      - server
+    networks:
+      - shelfshare-network
+    restart: always
 
   server:
     build:
@@ -27,7 +28,6 @@ services:
       - JWT_SECRET=${JWT_SECRET}
       - CLIENT_URL=${CLIENT_URL}
     volumes:
-      - ./server:/app
       - /app/node_modules
       - /app/dist
     depends_on:
@@ -35,6 +35,7 @@ services:
       - redis
     networks:
       - shelfshare-network
+    restart: always
 
   mongo:
     image: mongo:latest
@@ -45,6 +46,7 @@ services:
     command: mongod --replSet rs0 --bind_ip_all
     networks:
       - shelfshare-network
+    restart: always
 
   redis:
     image: redis:alpine
@@ -54,6 +56,7 @@ services:
       - redis_data:/data
     networks:
       - shelfshare-network
+    restart: always
 
 volumes:
   mongo_data:

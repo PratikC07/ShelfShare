@@ -1,0 +1,4 @@
+# Exclude local dependencies and build artifacts from the Docker build
+node_modules
+.next
+.env.local
