@@ -43,7 +43,7 @@ COPY --chown=nodejs:nodejs --from=build /app/.next ./.next
 
 # Copy public assets and Next.js config
 COPY --chown=nodejs:nodejs client/public ./public
-COPY --chown=nodejs:nodejs client/next.config.ts ./next.config.ts
+COPY --chown=nodejs:nodejs client/next.config.mjs ./next.config.mjs
 
 # Set the non-root user
 USER nodejs
