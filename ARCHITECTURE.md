@@ -8,10 +8,9 @@ These diagrams are written in the Mermaid syntax, which GitHub automatically ren
 
 ## 1. System Architecture Diagram
 
-
+This diagram shows the high-level components of the application. It illustrates the containerized services (Client, Server, Redis) running within a Docker network, and their communication with the external MongoDB Atlas database and the user's browser.
 
 [Image of a 3-tier web application architecture diagram]
-
 ```mermaid
 graph TD
     subgraph User
@@ -19,7 +18,8 @@ graph TD
     end
 
     subgraph " "
-        subgraph Docker Network (Local) / Render Services (Production)
+        %% This title is now in quotes to fix the parse error
+        subgraph "App Services (Docker / Render)"
             C[Client (Next.js)]
             S[Server (Express API)]
             R[Redis (Cache + Pub/Sub)]
