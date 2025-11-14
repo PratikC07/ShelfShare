@@ -1,20 +1,26 @@
 services:
+  # -------------------------
+  # CLIENT (Frontend Service)
+  # -------------------------
   client:
     build:
       context: .
       dockerfile: ./client/Dockerfile
       args:
-        - NEXT_PUBLIC_API_URL=${BACKEND_URL}
+        - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     ports:
       - "3000:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=${BACKEND_URL}
+      - NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
     depends_on:
       - server
     networks:
       - shelfshare-network
     restart: always
 
+  # -------------------------
+  # SERVER (Backend Service)
+  # -------------------------
   server:
     build:
       context: .
@@ -27,27 +33,15 @@ services:
       - REDIS_URL=${REDIS_URL}
       - JWT_SECRET=${JWT_SECRET}
       - CLIENT_URL=${CLIENT_URL}
-    volumes:
-      - /app/node_modules
-      - /app/dist
     depends_on:
-      - mongo
       - redis
     networks:
       - shelfshare-network
     restart: always
 
-  mongo:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo_data:/data/db
-    command: mongod --replSet rs0 --bind_ip_all
-    networks:
-      - shelfshare-network
-    restart: always
-
+  # -------------------------
+  # REDIS (Cache Service)
+  # -------------------------
   redis:
     image: redis:alpine
     ports:
@@ -58,9 +52,11 @@ services:
       - shelfshare-network
     restart: always
 
+# -------------------------
+# Volumes and Networks
+# -------------------------
 volumes:
-  mongo_data:
-  redis_data:
+  redis_data: {}
 
 networks:
   shelfshare-network:
