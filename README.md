@@ -104,7 +104,7 @@ This project uses a single `.env` file in the root to configure all services via
 
 The entire API is documented in Postman. You can import the collection and all endpoints by clicking the button below.
 
-[](https://documenter.getpostman.com/view/39600710/2sB3WvMdvK)
+[Postman API Documentation](https://documenter.getpostman.com/view/39600710/2sB3WvMdvK)
 
 ### API Overview
 
