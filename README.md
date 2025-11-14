@@ -78,7 +78,6 @@ Follow these steps to get the entire application (frontend, backend, and cache) 
     NEXT_PUBLIC_API_URL=http://localhost:5001/api
     ```
 
-    *Note: Your actual `.env` file was used as a reference, but the `.env.example` is the correct template to share.*
 
 3.  **Build and Run the Containers**
     This command will build the `client` and `server` Docker images and start all services defined in your `docker-compose.yml` file.
